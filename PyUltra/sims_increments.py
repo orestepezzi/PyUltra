@@ -2,7 +2,6 @@
 from math import *
 import numpy as np
 import matplotlib.pyplot as plt
-#import re
 
 ###########################################################################################
 def autocorr_3D(x,y,z,fx,fy,fz,Nlags):
