@@ -43,7 +43,38 @@ def omnispectra_3D(x,y,z,fx,fy,fz):
         return(wavenumbers_z,E1D)
 
     elif (Ny != 1):
-        print("implement the 2D case")
+        Lx = x[Nx-1]+x[1]
+        Ly = y[Ny-1]+y[1]
+
+        wavenumbers_x = np.fft.fftfreq(Nx, d=1/Nx) * 2 * np.pi / Lx
+        wavenumbers_y = np.fft.fftfreq(Ny, d=1/Ny) * 2 * np.pi / Ly
+
+        wavenumbers = np.stack(np.meshgrid(wavenumbers_x, wavenumbers_y) )
+        k = np.sqrt( np.sum(wavenumbers**2.,axis=0) )
+
+        ishell = np.rint(k/wavenumbers_y[1])
+
+        Nk = int(np.size(wavenumbers_y)/2)
+        mask = (ishell > 0) & (ishell <= Nk)
+        print(np.shape(mask))
+
+        fc  = np.fft.fft2(fx)/(Nx*Ny)
+        print(np.shape(fc))
+        E3D = np.real(fc*np.conjugate(fc))
+
+        fc  = np.fft.fft2(fy)/(Nx*Ny)
+        E3D = E3D + np.real(fc*np.conjugate(fc))
+
+        fc  = np.fft.fft2(fz)/(Nx*Ny)
+        E3D = E3D + np.real(fc*np.conjugate(fc))
+
+        E1D = np.zeros(Nk)
+        for ik in range(Nk):
+            mask2 = mask & (ishell == ik)#wavenumbers_y[ik])
+            E1D[ik] = np.sum(E3D,where= mask2)
+
+        return(wavenumbers_y[0:Nk],E1D)
+        
     else:
         print("implement the 1D case")
 
