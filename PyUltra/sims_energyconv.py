@@ -5,26 +5,52 @@ import matplotlib.pyplot as plt
 
 
 ###########################################################################################
+###########################################################################################
 def PiD(x,y,z,Pixx,Piyy,Pizz,Pixy,Pixz,Piyz,ux,uy,uz):
-    
-    dux = gradf_3D(x,y,z,ux)
-    duy = gradf_3D(x,y,z,uy)
-    duz = gradf_3D(x,y,z,uz)
+    Nx = np.size(x)
+    Ny = np.size(y)
+    Nz = np.size(z)
 
-    Pscalar=( Pixx + Piyy + Pizz)/3.0
+    if ( (Nz != 1) and (Ny != 1)):
+        dux = PyUltra.FFTderiv.gradf_3D(x,y,z,ux)
+        duy = PyUltra.FFTderiv.gradf_3D(x,y,z,uy)
+        duz = PyUltra.FFTderiv.gradf_3D(x,y,z,uz)
 
-    Pixx= Pixx - Pscalar
-    Piyy= Piyy - Pscalar
-    Pizz= Pizz - Pscalar
+        Pscalar=( Pixx + Piyy + Pizz)/3.0
 
-    divu = dux[0,:,:,:]+ duy[1,:,:,:] + duz[2,:,:,:] 
+        Pixx= Pixx - Pscalar
+        Piyy= Piyy - Pscalar
+        Pizz= Pizz - Pscalar
 
-    Ptheta = Pscalar*divu
+        divu = dux[0,:,:,:]+ duy[1,:,:,:] + duz[2,:,:,:]
 
-    PiD = Pixx*(dux[0,:,:,:] - divu/3.0) + Pixy*(dux[1,:,:,:]+duy[0,:,:,:]) + Pixz*(dux[2,:,:,:]+duz[0,:,:,:]) + \
-            Piyy*(duy[1,:,:,:] - divu/3.0) + Piyz*(duy[2,:,:,:]+duz[1,:,:,:]) + Pizz*(duz[2,:,:,:] - divu/3.0)
+        Ptheta = Pscalar*divu
 
-    return(PiD, Ptheta)
+        PiD = Pixx*(dux[0,:,:,:] - divu/3.0) + Pixy*(dux[1,:,:,:]+duy[0,:,:,:]) + Pixz*(dux[2,:,:,:]+duz[0,:,:,:]) + \
+              Piyy*(duy[1,:,:,:] - divu/3.0) + Piyz*(duy[2,:,:,:]+duz[1,:,:,:]) + Pizz*(duz[2,:,:,:] - divu/3.0)
+
+        return(PiD, Ptheta)
+
+    elif (Ny != 1):
+        dux = PyUltra.FFTderiv.gradf_2D(x,y,ux)
+        duy = PyUltra.FFTderiv.gradf_2D(x,y,uy)
+        duz = PyUltra.FFTderiv.gradf_2D(x,y,uz)
+
+        Pscalar=( Pixx + Piyy + Pizz)/3.0
+
+        Pixx= Pixx - Pscalar
+        Piyy= Piyy - Pscalar
+        Pizz= Pizz - Pscalar
+
+        divu = dux[0,:,:]+ duy[1,:,:]
+
+        Ptheta = Pscalar*divu
+
+        PiD = Pixx*(dux[0,:,:] - divu/3.0) + Pixy*(dux[1,:,:]+duy[0,:,:]) + Pixz*(duz[0,:,:]) + \
+              Piyy*(duy[1,:,:] - divu/3.0) + Piyz*(duz[1,:,:]) + Pizz*( - divu/3.0)
+
+        return(PiD, Ptheta)
+
 
 ###########################################################################################
 def Zenitani(Bx,By,Bz,Ex,Ey,Ez,jx,jy,jz,ux,uy,uz,rhoc,c):
