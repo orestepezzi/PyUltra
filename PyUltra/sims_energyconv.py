@@ -2,9 +2,8 @@
 from math import *
 import numpy as np
 import matplotlib.pyplot as plt
+import PyUltra.FFTderiv
 
-
-###########################################################################################
 ###########################################################################################
 def PiD(x,y,z,Pixx,Piyy,Pizz,Pixy,Pixz,Piyz,ux,uy,uz):
     Nx = np.size(x)
@@ -22,7 +21,7 @@ def PiD(x,y,z,Pixx,Piyy,Pizz,Pixy,Pixz,Piyz,ux,uy,uz):
         Piyy= Piyy - Pscalar
         Pizz= Pizz - Pscalar
 
-        divu = dux[0,:,:,:]+ duy[1,:,:,:] + duz[2,:,:,:]
+        divu = dux[0,:,:,:]+ duy[1,:,:,:] + duz[2,:,:,:] 
 
         Ptheta = Pscalar*divu
 
@@ -46,11 +45,17 @@ def PiD(x,y,z,Pixx,Piyy,Pizz,Pixy,Pixz,Piyz,ux,uy,uz):
 
         Ptheta = Pscalar*divu
 
+
+#        PiD = Pixx*dux[0,:,:] + Piyy*duy[1,:,:] + \
+#               Pixy*(dux[1,:,:]+duy[0,:,:]) + \
+#               Pixz*(duz[0,:,:] )  + \
+#               Piyz*(duz[1,:,:] )  
+#        PiD = PiD - Ptheta     
+
         PiD = Pixx*(dux[0,:,:] - divu/3.0) + Pixy*(dux[1,:,:]+duy[0,:,:]) + Pixz*(duz[0,:,:]) + \
               Piyy*(duy[1,:,:] - divu/3.0) + Piyz*(duz[1,:,:]) + Pizz*( - divu/3.0)
 
         return(PiD, Ptheta)
-
 
 ###########################################################################################
 def Zenitani(Bx,By,Bz,Ex,Ey,Ez,jx,jy,jz,ux,uy,uz,rhoc,c):

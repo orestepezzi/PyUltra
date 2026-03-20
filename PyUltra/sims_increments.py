@@ -62,7 +62,7 @@ def structfunc_3D(x,y,z,f,Nlags,NSFs):
     for il in range(np.size(dl)):
         for isf in range(NSFs):
                 SFdf_x[il,isf] = np.mean(np.abs( np.ravel(f - np.roll(f,-int(dl[il]),axis=0) ) )**(isf+1))
-                SFdf_y[il,isf] = np.mean(np.abs( np.ravel(f - np.roll(f,-int(dl[il]),axis=2) ) )**(isf+1))
+                SFdf_y[il,isf] = np.mean(np.abs( np.ravel(f - np.roll(f,-int(dl[il]),axis=1) ) )**(isf+1))
                 SFdf_z[il,isf] = np.mean(np.abs( np.ravel(f - np.roll(f,-int(dl[il]),axis=2) ) )**(isf+1))
 
     dl = dl*dx

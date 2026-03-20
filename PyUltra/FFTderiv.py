@@ -2,6 +2,7 @@
 from math import *
 import numpy as np
 import matplotlib.pyplot as plt
+#import re
 
 ###########################################################################################
 #############
@@ -293,7 +294,6 @@ def gradf_2D(x,y,f):
 
 ###########################################################################################
 def Poisson_2D(x,y,f):
-    print("NB: Check it!!!")
 
     Nx = np.size(x)
     Ny = np.size(y)
@@ -304,16 +304,11 @@ def Poisson_2D(x,y,f):
     wavenumbers_x = np.fft.fftfreq(Nx, d=1/Nx) * 2 * np.pi / Lx
     wavenumbers_y = np.fft.fftfreq(Ny, d=1/Ny) * 2 * np.pi / Ly
 
-#    KX, KY = np.meshgrid(wavenumbers_x, wavenumbers_y)
-#    wavenumbers = np.stack((KX, KY))
-
-#    derivative_operator = 1j * wavenumbers
-
     fc = np.fft.fft2(f)
     dfc = np.zeros(fc.shape, dtype=np.complex128)
 
-    for mx in range(int(Nx/2)):
-        for my in range(int(Ny/2)):
+    for mx in range(int(Nx)):
+        for my in range(int(Ny)):
             k2 = wavenumbers_x[mx]**2+ wavenumbers_y[my]**2
             if (k2 != 0):
                 dfc[mx,my] = - fc[mx,my]/k2

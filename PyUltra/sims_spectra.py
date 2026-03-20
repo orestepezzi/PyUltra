@@ -22,7 +22,7 @@ def omnispectra_3D(x,y,z,fx,fy,fz):
         wavenumbers = np.stack(np.meshgrid(wavenumbers_x, wavenumbers_y, wavenumbers_z, indexing='ij') )
         k = np.sqrt( np.sum(wavenumbers**2.,axis=0) )
 
-        ishell = np.rint(k)
+        ishell = np.rint(k/wavenumbers_z[1])
 
         mask = (ishell > 0) & (ishell <= np.size(wavenumbers_z))
 
@@ -37,7 +37,7 @@ def omnispectra_3D(x,y,z,fx,fy,fz):
 
         E1D = np.zeros(np.size(wavenumbers_z))
         for ik in range(np.size(wavenumbers_z)):
-            mask2 = mask & (ishell == wavenumbers_z[ik])
+            mask2 = mask & (ishell == ik) #wavenumbers_z[ik])
             E1D[ik] = np.sum(E3D,where= mask2)
 
         return(wavenumbers_z,E1D)
@@ -72,9 +72,9 @@ def omnispectra_3D(x,y,z,fx,fy,fz):
         for ik in range(Nk):
             mask2 = mask & (ishell == ik)#wavenumbers_y[ik])
             E1D[ik] = np.sum(E3D,where= mask2)
-
-        return(wavenumbers_y[0:Nk],E1D)
         
+        return(wavenumbers_y[0:Nk],E1D)
+
     else:
         print("implement the 1D case")
 
@@ -125,7 +125,7 @@ def parperpspectra_3D(x,y,z,fx,fy,fz):
 
         return(wavenumbers_z,wavenumbers_z,Eperp,Epar)
 
-    elif (Ny != 1):
-        print("implement the 2D case")
+#    elif (Ny != 1):
+
 
 ###########################################################################################

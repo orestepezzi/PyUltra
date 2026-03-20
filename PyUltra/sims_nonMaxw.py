@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 
 ###########################################################################################
-def PparPerp(Pixx,Piyy,Pizz,Pixy,Pixz,Piyz,fx,fy,fz):
+def PparPperp(Pixx,Piyy,Pizz,Pixy,Pixz,Piyz,fx,fy,fz):
     Ppar = fx**2.0*Pixx +fy**2.0*Piyy + fz**2.0*Pizz + 2.0*(fx*fy*Pixy + fx*fz*Pixz + fy*fz*Piyz )
     Ppar = Ppar/(fx**2.0 + fy**2.0 + fz**2.0)
 
