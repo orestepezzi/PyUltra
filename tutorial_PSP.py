@@ -8,7 +8,7 @@ from numpy.polynomial.hermite import hermgauss, Hermite
 from PyUltra.insitu_PSP_hermite2D import * 
 from PyUltra.insitu_PSP_VDFroutines import * 
 
-
+#This directory has to be created before executing this tutorial.
 save_folder = 'testPSP/'
 
 # =============================================================================
