@@ -289,6 +289,13 @@ def get_single_vdf(thetaSlice, phiSlice, energySlice, efluxSlice):
     """ get vdf and velocity for a given time/array index"""
     
     thetaReshaped = thetaSlice.reshape((8,32,8))
+    
+	# hysteresis correction  
+    dtheta = np.zeros_like(thetaReshaped)
+    dtheta[:, :, ::2] = -2.2
+    dtheta[:, :, 1::2] = +2.2
+	thetaReshaped = thetaReshaped + dtheta
+
     phiReshaped = phiSlice.reshape((8,32,8))
     energyReshaped = energySlice.reshape((8,32,8))
     efluxReshaped = efluxSlice.reshape((8,32,8))
