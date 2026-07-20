@@ -213,7 +213,7 @@ def curl_2D(x,y,fx,fy,fz):
     wavenumbers_x = np.fft.fftfreq(Nx, d=1/Nx) * 2 * np.pi / Lx
     wavenumbers_y = np.fft.fftfreq(Ny, d=1/Ny) * 2 * np.pi / Ly
 
-    KX, KY = np.meshgrid(wavenumbers_x, wavenumbers_y)
+    KX, KY = np.meshgrid(wavenumbers_x, wavenumbers_y,indexing="ij")
     wavenumbers = np.stack((KX, KY))
 
     derivative_operator = 1j * wavenumbers
@@ -235,7 +235,7 @@ def div_2D(x,y,fx,fy,fz):
     wavenumbers_x = np.fft.fftfreq(Nx, d=1/Nx) * 2 * np.pi / Lx
     wavenumbers_y = np.fft.fftfreq(Ny, d=1/Ny) * 2 * np.pi / Ly
 
-    KX, KY = np.meshgrid(wavenumbers_x, wavenumbers_y)
+    KX, KY = np.meshgrid(wavenumbers_x, wavenumbers_y,indexing="ij")
     wavenumbers = np.stack((KX, KY))
 
     derivative_operator = 1j * wavenumbers
@@ -256,7 +256,7 @@ def strain_2D(x,y,fx,fy,fz):
     wavenumbers_x = np.fft.fftfreq(Nx, d=1/Nx) * 2 * np.pi / Lx
     wavenumbers_y = np.fft.fftfreq(Ny, d=1/Ny) * 2 * np.pi / Ly
 
-    KX, KY = np.meshgrid(wavenumbers_x, wavenumbers_y)
+    KX, KY = np.meshgrid(wavenumbers_x, wavenumbers_y,indexing="ij")
     wavenumbers = np.stack((KX, KY))
 
     derivative_operator = 1j * wavenumbers
@@ -273,24 +273,22 @@ def strain_2D(x,y,fx,fy,fz):
 
 
 ###########################################################################################
-def gradf_2D(x,y,f):
+def gradf_2D(x, y, f):  
     Nx = np.size(x)
     Ny = np.size(y)
 
-    Lx = x[Nx-1]+x[1]
-    Ly = y[Ny-1]+y[1]
+    Lx = x[Nx - 1] + x[1]
+    Ly = y[Ny - 1] + y[1]
 
-    wavenumbers_x = np.fft.fftfreq(Nx, d=1/Nx) * 2 * np.pi / Lx
-    wavenumbers_y = np.fft.fftfreq(Ny, d=1/Ny) * 2 * np.pi / Ly
+    kx = np.fft.fftfreq(Nx, d=1.0 / Nx) * 2.0 * np.pi / Lx
+    ky = np.fft.fftfreq(Ny, d=1.0 / Ny) * 2.0 * np.pi / Ly
 
-    KX, KY = np.meshgrid(wavenumbers_x, wavenumbers_y)
-    wavenumbers = np.stack((KX, KY))
+    KX, KY = np.meshgrid(kx, ky, indexing="ij")
 
-    derivative_operator = 1j * wavenumbers
+    derivative_operator = 1j * np.stack((KX, KY))
 
-    gradf = np.fft.ifft2(derivative_operator * np.fft.fft2(f)).real
+    return np.fft.ifft2(derivative_operator * np.fft.fft2(f)).real
 
-    return(gradf)
 
 ###########################################################################################
 def Poisson_2D(x,y,f):
