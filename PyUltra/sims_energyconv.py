@@ -6,6 +6,7 @@ import PyUltra.FFTderiv
 
 ###########################################################################################
 def PiD(x,y,z,Pixx,Piyy,Pizz,Pixy,Pixz,Piyz,ux,uy,uz):
+    #divu in PiD can be elimitated as Pixx is traceless.
     Nx = np.size(x)
     Ny = np.size(y)
     Nz = np.size(z)
@@ -25,8 +26,8 @@ def PiD(x,y,z,Pixx,Piyy,Pizz,Pixy,Pixz,Piyz,ux,uy,uz):
 
         Ptheta = Pscalar*divu
 
-        PiD = Pixx*(dux[0,:,:,:] - divu/3.0) + Pixy*(dux[1,:,:,:]+duy[0,:,:,:]) + Pixz*(dux[2,:,:,:]+duz[0,:,:,:]) + \
-              Piyy*(duy[1,:,:,:] - divu/3.0) + Piyz*(duy[2,:,:,:]+duz[1,:,:,:]) + Pizz*(duz[2,:,:,:] - divu/3.0)
+        PiD = Pixx*(dux[0,:,:,:] ) + Pixy*(dux[1,:,:,:]+duy[0,:,:,:]) + Pixz*(dux[2,:,:,:]+duz[0,:,:,:]) + \
+              Piyy*(duy[1,:,:,:] ) + Piyz*(duy[2,:,:,:]+duz[1,:,:,:]) + Pizz*(duz[2,:,:,:])
 
         return(PiD, Ptheta)
 
@@ -45,15 +46,8 @@ def PiD(x,y,z,Pixx,Piyy,Pizz,Pixy,Pixz,Piyz,ux,uy,uz):
 
         Ptheta = Pscalar*divu
 
-
-#        PiD = Pixx*dux[0,:,:] + Piyy*duy[1,:,:] + \
-#               Pixy*(dux[1,:,:]+duy[0,:,:]) + \
-#               Pixz*(duz[0,:,:] )  + \
-#               Piyz*(duz[1,:,:] )  
-#        PiD = PiD - Ptheta     
-
-        PiD = Pixx*(dux[0,:,:] - divu/3.0) + Pixy*(dux[1,:,:]+duy[0,:,:]) + Pixz*(duz[0,:,:]) + \
-              Piyy*(duy[1,:,:] - divu/3.0) + Piyz*(duz[1,:,:]) + Pizz*( - divu/3.0)
+        PiD = Pixx*(dux[0,:,:] ) + Pixy*(dux[1,:,:]+duy[0,:,:]) + Pixz*(duz[0,:,:]) + \
+              Piyy*(duy[1,:,:] ) + Piyz*(duz[1,:,:]) 
 
         return(PiD, Ptheta)
 
@@ -95,9 +89,9 @@ def PiD_components(x, y, z, Pixx, Piyy, Pizz, Pixy, Pixz, Piyz, ux, uy, uz):
 
         # Normal (diagonal) part
         PiD_normal = (
-            Pixx_dev * (dux[0, :, :, :] - divu / 3.0)
-            + Piyy_dev * (duy[1, :, :, :] - divu / 3.0)
-            + Pizz_dev * (duz[2, :, :, :] - divu / 3.0)
+            Pixx_dev * (dux[0, :, :, :] )
+            + Piyy_dev * (duy[1, :, :, :] )
+            + Pizz_dev * (duz[2, :, :, :] )
         )
 
         # Shear (off-diagonal) part
@@ -135,9 +129,8 @@ def PiD_components(x, y, z, Pixx, Piyy, Pizz, Pixy, Pixz, Piyz, ux, uy, uz):
 
         # Normal (diagonal) part
         PiD_normal = (
-            Pixx_dev * (dux[0, :, :] - divu / 3.0)
-            + Piyy_dev * (duy[1, :, :] - divu / 3.0)
-            + Pizz_dev * (-divu / 3.0)
+            Pixx_dev * (dux[0, :, :] )
+            + Piyy_dev * (duy[1, :, :] )
         )
 
         # Shear (off-diagonal) part
