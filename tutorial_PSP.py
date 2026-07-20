@@ -8,8 +8,9 @@ from numpy.polynomial.hermite import hermgauss, Hermite
 from PyUltra.insitu_PSP_hermite2D import * 
 from PyUltra.insitu_PSP_VDFroutines import * 
 
-#This directory has to be created before executing this tutorial.
+#This directories mustbe created before executing this tutorial.
 save_folder = 'testPSP/'
+save_folder_vdfs = 'vdfFolder/'
 
 # =============================================================================
 # Hermite grid and order, used for all the vdfs
@@ -84,7 +85,7 @@ vth_par = np.sqrt(Tpar/mass_p)
 vBulk =  get_data('psp_spi_VEL_INST', metadata=False).y
 
 ############ vdf part#############################
-fileVDF = find_or_download_spi_vdf(timeSlice1, timeSlice2)
+fileVDF = find_or_download_spi_vdf(timeSlice1, timeSlice2, download_dir=save_folder_vdfs)
 
 # get span data for the interval
 theta, phi, energy, eflux = get_theta_phi_energy_eflux_trange(timeSlice1, timeSlice2, fileVDF)
